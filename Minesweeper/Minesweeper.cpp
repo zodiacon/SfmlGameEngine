@@ -151,7 +151,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	auto menu = std::make_shared<Scene>(game);
 
-	Theme::setDefault(R"(D:\dev\SfmlGameEngine\Minesweeper\Assets\black.txt)");
+	char path[MAX_PATH];
+	::GetModuleFileNameA(nullptr, path, _countof(path));
+	*strrchr(path, '\\') = 0;
+	strcat_s(path, "\\Themes\\black.txt");
+	Theme::setDefault(path);
 
 	Gui gui(game.Window());
 	menu->SetWindowSize(600, 600);

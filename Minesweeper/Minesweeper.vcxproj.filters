@@ -41,5 +41,11 @@
     <CopyFileToFolders Include="Assets\Fonts\space.ttf">
       <Filter>Assets\Fonts</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\Black.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\Black.txt">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>
