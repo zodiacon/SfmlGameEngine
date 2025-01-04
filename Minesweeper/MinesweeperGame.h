@@ -21,6 +21,8 @@ public:
 	bool Init(int width, int height);
 	void PlaceMines(int count);
 	void PlaceMinesPercent(float percent);
+	bool AreAllFlagsPlaced() const;
+	bool IsGridFull() const;
 
 	void Clear();
 

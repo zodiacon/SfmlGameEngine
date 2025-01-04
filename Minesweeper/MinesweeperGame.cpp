@@ -34,6 +34,14 @@ void MinesweeperGame::PlaceMinesPercent(float percent) {
 	PlaceMines(int(m_Width * m_Height * percent / 100));
 }
 
+bool MinesweeperGame::AreAllFlagsPlaced() const {
+	return m_TotalFlags == m_TotalMines;
+}
+
+bool MinesweeperGame::IsGridFull() const {
+	return m_TotalOpen + m_TotalFlags == m_Width * m_Height;
+}
+
 int MinesweeperGame::GetWidth() const {
 	return m_Width;
 }
@@ -70,7 +78,8 @@ int MinesweeperGame::OpenCell(int x, int y) {
 	if (GetCell(x, y).MinesAround < 0)
 		return -1;
 
-	switch (GetCell(x, y).State) {
+	auto state = GetCell(x, y).State;
+	switch (state) {
 		case CellState::Mine:
 			return -1;      // mine
 
@@ -78,6 +87,9 @@ int MinesweeperGame::OpenCell(int x, int y) {
 			return GetCell(x, y).MinesAround;
 
 	}
+
+	if (state == CellState::Flag)
+		m_TotalFlags--;
 
 	SetCell(x, y, CellState::Open);
 	m_TotalOpen++;
@@ -97,7 +109,7 @@ int MinesweeperGame::OpenCell(int x, int y) {
 			for (int yy = y - 1; yy <= y + 1; yy++) {
 				if (xx == x && yy == y)
 					continue;
-				if (GetCell(xx, yy).State == CellState::Empty)
+				if (GetCell(xx, yy).State == CellState::Empty || GetCell(xx, yy).State == CellState::Flag)
 					OpenCell(xx, yy);
 			}
 	}
@@ -115,17 +127,14 @@ bool MinesweeperGame::SetFlag(int x, int y) {
 
 bool MinesweeperGame::ToggleFlag(int x, int y) {
 	auto& cell = GetCell(x, y);
-	if (cell.State == CellState::Open)
-		return false;
 
 	if (cell.State != CellState::Flag) {
+		if (m_TotalFlags == m_TotalMines)
+			return false;
 		SetCell(x, y, CellState::Flag);
 		m_TotalFlags++;
 	}
 	else {
-		if (m_TotalFlags == m_TotalMines)
-			return false;
-
 		SetCell(x, y, CellState::Empty);
 		m_TotalFlags--;
 	}

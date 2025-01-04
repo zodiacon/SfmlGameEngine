@@ -3,6 +3,7 @@
 #include "SfmlHelpers.h"
 #include <algorithm>
 #include <SFML/Audio.hpp>
+#include <cassert>
 
 AssetManager::AssetManager() {
 	char path[MAX_PATH];
@@ -27,10 +28,16 @@ sf::Texture const& AssetManager::Texture(std::string const& name) const {
 	return m_Textures.at(name);
 }
 
+sf::Texture& AssetManager::Texture(std::string const& name) {
+	return m_Textures.at(name);
+}
+
 bool AssetManager::LoadFont(std::string const& fileName, std::string name) {
 	sf::Font font;
-	if (!font.loadFromFile(m_FontsDir + fileName))
+	if (!font.loadFromFile(m_FontsDir + fileName)) {
+		assert(("Failed to load font ", false));
 		return false;
+	}
 
 	if (name.empty()) {
 		name = SfmlHelpers::GetNameFromFileName(fileName);

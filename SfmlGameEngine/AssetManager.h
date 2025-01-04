@@ -13,16 +13,20 @@ namespace sf {
 class AssetManager {
 public:
 	AssetManager();
-	AssetManager(AssetManager&) = delete;
-	AssetManager& operator=(AssetManager&) = delete;
+	AssetManager(AssetManager const&) = delete;
+	AssetManager& operator=(AssetManager const&) = delete;
+	AssetManager(AssetManager&&) = default;
+	AssetManager& operator=(AssetManager&&) = default;
 
 	bool LoadTexture(std::string const& fileName, std::string name = "");
 	sf::Texture const& Texture(std::string const& name) const;
+	sf::Texture& Texture(std::string const& name);
 
 	bool LoadFont(std::string const& fileName, std::string name = "");
 	sf::Font const& Font(std::string const& name) const;
 
 	bool LoadSound(std::string const& fileName, std::string name = "");
+	sf::SoundBuffer const& Sound(std::string const& name) const;
 
 private:
 	struct NoCaseHash {

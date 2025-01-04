@@ -3,8 +3,9 @@
 #include "SceneManager.h"
 #include "AssetManager.h"
 #include <SFML/Graphics.hpp>
+#include "MoveOnly.h"
 
-class Game {
+class Game : public MoveOnly {
 public:
 	virtual ~Game() = default;
 	virtual bool Init(int width, int height, const std::string& title, sf::Uint32 style = sf::Style::Close | sf::Style::Titlebar);
@@ -12,18 +13,26 @@ public:
 
 	bool LoadTexture(std::string const& fileName, std::string name = "");
 	sf::Texture const& Texture(std::string const& name) const;
-
 	bool LoadFont(std::string const& fileName, std::string name = "");
 	sf::Font const& Font(std::string const& name) const;
 
-	void PushScene(std::unique_ptr<Scene> scene, bool replace = false);
+	void PushScene(std::shared_ptr<Scene> scene, bool replace = false);
 	template<typename T>
 	void PushScene() {
 		PushScene(std::make_unique<T>(*this));
 	}
+	std::shared_ptr<Scene> PopScene();
 
-	Scene* ActiveScene();
+	void Pause();
+	void Resume();
+	bool IsPaused() const;
+
+	sf::Time const& GetTime() const;
+	sf::Time GetElapsedTime() const;
+
+	std::shared_ptr<Scene> ActiveScene();
 	AssetManager& Assets();
+	AssetManager const& Assets() const;
 	sf::RenderWindow& Window();
 
 private:
@@ -31,5 +40,8 @@ private:
 	AssetManager m_AssetsManager;
 	sf::RenderWindow m_Window;
 	sf::Clock m_Clock;
+	sf::Time m_Time;
+	sf::Color m_BackColor{ sf::Color::Black };
+	bool m_Paused{ false };
 };
 

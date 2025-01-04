@@ -1,8 +1,7 @@
 #define NOMINMAX
 
 #include <Windows.h>
-#include <SfmlHelpers.h>
-#include <Game.h>
+#include <SfmlGameEngine.h>
 
 using namespace std;
 

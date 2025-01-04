@@ -28,3 +28,25 @@ void SfmlHelpers::SetSpriteSizeCentered(sf::Sprite& sprite, sf::Vector2f const& 
 	sprite.setScale(size.x / tsize.x, size.y / tsize.y);
 	sprite.setOrigin(tsize.x / 2.f, tsize.y / 2.f);
 }
+
+bool SfmlHelpers::SetWindowIcon(sf::Window& win, HICON hIcon, HINSTANCE hInstance) {
+	::SendMessage(win.getSystemHandle(), WM_SETICON, 1, reinterpret_cast<LPARAM>(hIcon));
+	::SendMessage(win.getSystemHandle(), WM_SETICON, 0, reinterpret_cast<LPARAM>(hIcon));
+	return true;
+}
+
+bool SfmlHelpers::SetWindowIcon(sf::Window& win, UINT id, HINSTANCE hInstance) {
+	auto hIcon = ::LoadIcon(hInstance ? hInstance : ::GetModuleHandle(nullptr), MAKEINTRESOURCE(id));
+	return hIcon ? SetWindowIcon(win, hIcon) : false;
+}
+
+bool SfmlHelpers::SetWindowIcon(sf::Window& win, PCTSTR id, HINSTANCE hInstance) {
+	auto hIcon = ::LoadIcon(hInstance ? hInstance : ::GetModuleHandle(nullptr), id);
+	return hIcon ? SetWindowIcon(win, hIcon) : false;
+}
+
+void SfmlHelpers::SetWindowFullSize(sf::RenderWindow& win, sf::Vector2u const& size) {
+	win.setSize(size);
+	sf::View view(sf::Vector2f(size) / 2.f, sf::Vector2f(size));
+	win.setView(view);
+}

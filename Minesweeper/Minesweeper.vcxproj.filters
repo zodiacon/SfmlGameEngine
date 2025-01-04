@@ -38,5 +38,8 @@
     <CopyFileToFolders Include="Assets\Textures\Mine.png">
       <Filter>Assets\Textures</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\Fonts\space.ttf">
+      <Filter>Assets\Fonts</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
 </Project>

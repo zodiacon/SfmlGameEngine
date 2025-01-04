@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "SceneManager.h"
 #include "Game.h"
+#include "GameComponent.h"
+#include "Scene.h"
 
-void SceneManager::PushScene(std::unique_ptr<Scene> scene, bool replace) {
-	if(m_Scenes.empty())
+void SceneManager::PushScene(std::shared_ptr<Scene> scene, bool replace) {
+	if (m_Scenes.empty())
 		m_Scenes.push(std::move(scene));
 	else {
 		if (replace)
@@ -12,23 +14,13 @@ void SceneManager::PushScene(std::unique_ptr<Scene> scene, bool replace) {
 	}
 }
 
-Scene* SceneManager::GetCurrentScene() {
-	return m_Scenes.empty() ? nullptr : m_Scenes.top().get();
+std::shared_ptr<Scene> SceneManager::GetCurrentScene() {
+	return m_Scenes.empty() ? nullptr : m_Scenes.top();
 }
 
-void SceneManager::Pop() {
+std::shared_ptr<Scene> SceneManager::Pop() {
+	auto top = m_Scenes.top();
 	m_Scenes.pop();
+	return top;
 }
 
-Scene::Scene(Game& game) : m_Game(game) {
-}
-
-void Scene::OnUpdate(float dt) {
-	if (Update)
-		Update(dt);
-}
-
-void Scene::OnDraw(sf::RenderWindow& win, float dt) {
-	if (Draw)
-		Draw(win, dt);
-}
