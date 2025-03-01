@@ -1,6 +1,6 @@
 #pragma once
 
-class MoveOnly {
+class MoveOnly abstract {
 public:
 	MoveOnly() = default;
 	MoveOnly(MoveOnly const&) = delete;

@@ -34,7 +34,7 @@ sf::Texture& AssetManager::Texture(std::string const& name) {
 
 bool AssetManager::LoadFont(std::string const& fileName, std::string name) {
 	sf::Font font;
-	if (!font.loadFromFile(m_FontsDir + fileName)) {
+	if (!font.openFromFile(m_FontsDir + fileName)) {
 		assert(("Failed to load font ", false));
 		return false;
 	}

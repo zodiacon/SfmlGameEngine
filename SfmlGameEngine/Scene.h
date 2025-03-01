@@ -17,7 +17,7 @@ public:
 	sf::Color const& GetBackColor() const;
 	void SetBackColor(sf::Color color);
 	void SetWindowSize(sf::Vector2u size);
-	void SetWindowSize(float sx, float sy);
+	void SetWindowSize(unsigned sx, unsigned sy);
 	sf::Vector2u const& GetWindowSize() const;
 
 protected:

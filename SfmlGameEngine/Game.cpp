@@ -3,8 +3,9 @@
 #include "Scene.h"
 #include "SfmlHelpers.h"
 
-bool Game::Init(int width, int height, const std::string& title, sf::Uint32 style) {
-	m_Window.create(sf::VideoMode(width, height), title, style);
+bool Game::Init(uint32_t width, uint32_t height, const std::string& title, uint32_t style) {
+	sf::VideoMode mode(sf::Vector2u(width, height));
+	m_Window.create(mode, sf::String(title), style);
 	m_Window.setFramerateLimit(60);
 	return true;
 }
@@ -13,25 +14,24 @@ void Game::Run() {
 	while (m_Window.isOpen()) {
 		auto scene = ActiveScene();
 		auto time = m_Clock.restart();
-		sf::Event event;
-		while (m_Window.pollEvent(event)) {
-			if (scene == nullptr || scene->HandleEvent == nullptr || !scene->HandleEvent(event)) {
-				if (event.type == sf::Event::Closed) {
-					m_Window.close();
+		while (m_Window.isOpen()) {
+			while (auto const event = m_Window.pollEvent()) {
+				if (scene == nullptr || scene->HandleEvent == nullptr || !scene->HandleEvent(*event)) {
+					if (event->is<sf::Event::Closed>()) {
+						m_Window.close();
+					}
 				}
 			}
+			if (scene) {
+				auto& color = scene->GetBackColor();
+				m_Window.clear(color == sf::Color::Transparent ? m_BackColor : color);
+				auto dt = time.asSeconds();
+				scene->OnUpdate(dt);
+				scene->OnDraw(m_Window, dt);
+				m_Window.display();
+			}
 		}
-		if (scene) {
-			auto& color = scene->GetBackColor();
-			m_Window.clear(color == sf::Color::Transparent ? m_BackColor : color);
-			auto dt = time.asSeconds();
-			scene->OnUpdate(dt);
-			scene->OnDraw(m_Window, dt);
-			m_Window.display();
-		}
-		else {
-			m_Window.clear(m_BackColor);
-		}
+		m_Window.clear(m_BackColor);
 		if(!m_Paused)
 			m_Time += time;
 	}

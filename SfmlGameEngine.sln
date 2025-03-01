@@ -11,6 +11,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Hello", "Hello\Hello.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Minesweeper", "Minesweeper\Minesweeper.vcxproj", "{1A1E7A5D-1CE0-4B61-8A00-D7A47B038B64}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Simple", "Simple\Simple.vcxproj", "{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ObjectModel", "ObjectModel\ObjectModel.vcxproj", "{E3FEEF80-3BB4-2754-7CC0-5662D6603571}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -43,6 +47,22 @@ Global
 		{1A1E7A5D-1CE0-4B61-8A00-D7A47B038B64}.Release|x64.Build.0 = Release|x64
 		{1A1E7A5D-1CE0-4B61-8A00-D7A47B038B64}.Release|x86.ActiveCfg = Release|Win32
 		{1A1E7A5D-1CE0-4B61-8A00-D7A47B038B64}.Release|x86.Build.0 = Release|Win32
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Debug|x64.ActiveCfg = Debug|x64
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Debug|x64.Build.0 = Debug|x64
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Debug|x86.ActiveCfg = Debug|Win32
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Debug|x86.Build.0 = Debug|Win32
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Release|x64.ActiveCfg = Release|x64
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Release|x64.Build.0 = Release|x64
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Release|x86.ActiveCfg = Release|Win32
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B}.Release|x86.Build.0 = Release|Win32
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Debug|x64.ActiveCfg = Debug|x64
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Debug|x64.Build.0 = Debug|x64
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Debug|x86.ActiveCfg = Debug|Win32
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Debug|x86.Build.0 = Debug|Win32
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Release|x64.ActiveCfg = Release|x64
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Release|x64.Build.0 = Release|x64
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Release|x86.ActiveCfg = Release|Win32
+		{E3FEEF80-3BB4-2754-7CC0-5662D6603571}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -50,6 +70,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{72DDA05B-5C8D-4E90-BFF5-47C2F8F8DBC5} = {82DEA591-1C5B-41C4-BCC6-AD477D90E7D0}
 		{1A1E7A5D-1CE0-4B61-8A00-D7A47B038B64} = {82DEA591-1C5B-41C4-BCC6-AD477D90E7D0}
+		{B1EDB4B4-83D3-4B3A-9E83-513C0E49F89B} = {82DEA591-1C5B-41C4-BCC6-AD477D90E7D0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D79377A-2E85-4CED-8A01-E8790E490E17}

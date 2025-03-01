@@ -40,7 +40,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SfmlHelpers::SetSpriteSizeCentered(mineSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .9f);
 
 	auto font = game.Font("arial");
-	sf::Text mineCountText("0", font, int(cellSize * .8f));
+	sf::Text mineCountText(font, "0", int(cellSize * .8f));
 	mineCountText.setOutlineColor(sf::Color::White);
 
 	auto space = game.Font("space");
@@ -55,31 +55,30 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		};
 
-	main->HandleEvent = [&](auto& evt) {
+	main->HandleEvent = [&](sf::Event const& evt) {
 		if (gameOver)
 			return false;
 
-		switch (evt.type) {
-			case sf::Event::MouseButtonReleased:
-				int x = evt.mouseButton.x, y = evt.mouseButton.y;
-				auto cx = (x - xoffset) / cellSize, cy = (y - statHeight) / cellSize;
-				auto& cell = ms.GetCell(x, y);
-				if (evt.mouseButton.button == sf::Mouse::Right) {
-					ms.ToggleFlag(cx, cy);
-					if (ms.GetTotalFlags() == ms.GetTotalMines()) {
-						// all flags placed
-					}
-					return true;
+		if (evt.is<sf::Event::MouseButtonReleased>()) {
+			auto params = evt.getIf<sf::Event::MouseButtonReleased>();
+			int x = params->position.x, y = params->position.y;
+			auto cx = (x - xoffset) / cellSize, cy = (y - statHeight) / cellSize;
+			auto& cell = ms.GetCell(x, y);
+			if (params->button == sf::Mouse::Button::Right) {
+				ms.ToggleFlag(cx, cy);
+				if (ms.GetTotalFlags() == ms.GetTotalMines()) {
+					// all flags placed
 				}
-				else if (evt.mouseButton.button == sf::Mouse::Left) {
-					if (ms.OpenCell(cx, cy) < 0) {
-						// bomb! game over
-						gameOver = true;
-						game.Pause();
-					}
-					return true;
+				return true;
+			}
+			else if (params->button == sf::Mouse::Button::Left) {
+				if (ms.OpenCell(cx, cy) < 0) {
+					// bomb! game over
+					gameOver = true;
+					game.Pause();
 				}
-				break;
+				return true;
+			}
 		}
 		return false;
 		};
@@ -89,15 +88,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		r.setOutlineColor(sf::Color::Blue);
 		r.setOutlineThickness(1.0f);
 
-		sf::Text stats(std::format("Time: {} Flags: {} Left: {}", 
-			(int)game.GetTime().asSeconds(), ms.GetTotalFlags(), ms.GetTotalMines() - ms.GetTotalFlags()), space, 25);
+		sf::Text stats(space, std::format("Time: {} Flags: {} Left: {}",
+			(int)game.GetTime().asSeconds(), ms.GetTotalFlags(), ms.GetTotalMines() - ms.GetTotalFlags()), 25);
 		stats.setPosition(sf::Vector2f(SfmlHelpers::CenterX(stats, win), 4));
 		stats.setFillColor(Colors::Yellow);
 		win.draw(stats);
 
 		for (int y = 0; y < ms.GetHeight(); y++) {
 			for (int x = 0; x < ms.GetWidth(); x++) {
-				r.setPosition(x * cellSize + 1.f + xoffset, y * cellSize + 1.f + statHeight);
+				r.setPosition(Vector2f(x * cellSize + 1.f + xoffset, y * cellSize + 1.f + statHeight));
 				auto state = ms.GetCell(x, y).State;
 				switch (state) {
 					case CellState::Flag:
@@ -141,7 +140,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 		if (gameWon) {
-			sf::Text gameOver("  GAME OVER  \nYou have won!", space, 40);
+			sf::Text gameOver(space, "  GAME OVER  \nYou have won!", 40);
 			gameOver.setStyle(sf::Text::Bold);
 			gameOver.setFillColor(Colors::LightGreen);
 			gameOver.setPosition(SfmlHelpers::Center(gameOver, win));
@@ -204,7 +203,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return gui.handleEvent(evt);
 		};
 
-	sf::Text title("MINESWEEPER - SFML edition", font, 30);
+	sf::Text title(font, "MINESWEEPER - SFML edition", 30);
 	title.setFillColor(Colors::Yellow);
 	menu->Draw = [&](auto& win, auto dt) {
 		title.setPosition(sf::Vector2f(SfmlHelpers::CenterX(title, game.Window()), 20));

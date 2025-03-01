@@ -8,7 +8,7 @@
 class Game : public MoveOnly {
 public:
 	virtual ~Game() = default;
-	virtual bool Init(int width, int height, const std::string& title, sf::Uint32 style = sf::Style::Close | sf::Style::Titlebar);
+	virtual bool Init(uint32_t width, uint32_t height, const std::string& title, uint32_t style = sf::Style::Close | sf::Style::Titlebar);
 	virtual void Run();
 
 	bool LoadTexture(std::string const& fileName, std::string name = "");

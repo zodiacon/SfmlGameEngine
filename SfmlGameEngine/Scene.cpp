@@ -20,7 +20,7 @@ void Scene::SetWindowSize(sf::Vector2u size) {
 	m_WindowSize = size;
 }
 
-void Scene::SetWindowSize(float sx, float sy) {
+void Scene::SetWindowSize(unsigned sx, unsigned sy) {
 	SetWindowSize(sf::Vector2u(sx, sy));
 }
 

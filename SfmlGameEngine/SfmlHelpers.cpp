@@ -12,11 +12,11 @@ std::string SfmlHelpers::GetNameFromFileName(std::string const& fileName) {
 }
 
 float SfmlHelpers::CenterX(sf::Text& text, sf::RenderTarget& target) {
-	return (target.getSize().x - text.getLocalBounds().width) / 2;
+	return (target.getSize().x - text.getLocalBounds().size.x) / 2;
 }
 
 float SfmlHelpers::CenterY(sf::Text& text, sf::RenderTarget& target) {
-	return (target.getSize().y - text.getLocalBounds().height) / 2;
+	return (target.getSize().y - text.getLocalBounds().size.y) / 2;
 }
 
 sf::Vector2f SfmlHelpers::Center(sf::Text& text, sf::RenderTarget& target) {
@@ -24,14 +24,14 @@ sf::Vector2f SfmlHelpers::Center(sf::Text& text, sf::RenderTarget& target) {
 }
 
 void SfmlHelpers::SetSpriteSizeCentered(sf::Sprite& sprite, sf::Vector2f const& size) {
-	auto tsize = sprite.getTexture()->getSize();
-	sprite.setScale(size.x / tsize.x, size.y / tsize.y);
-	sprite.setOrigin(tsize.x / 2.f, tsize.y / 2.f);
+	auto tsize = sprite.getTexture().getSize();
+	sprite.setScale(sf::Vector2f(size.x / tsize.x, size.y / tsize.y));
+	sprite.setOrigin(sf::Vector2f(tsize.x / 2.f, tsize.y / 2.f));
 }
 
 bool SfmlHelpers::SetWindowIcon(sf::Window& win, HICON hIcon, HINSTANCE hInstance) {
-	::SendMessage(win.getSystemHandle(), WM_SETICON, 1, reinterpret_cast<LPARAM>(hIcon));
-	::SendMessage(win.getSystemHandle(), WM_SETICON, 0, reinterpret_cast<LPARAM>(hIcon));
+	::SendMessage(win.getNativeHandle(), WM_SETICON, 1, reinterpret_cast<LPARAM>(hIcon));
+	::SendMessage(win.getNativeHandle(), WM_SETICON, 0, reinterpret_cast<LPARAM>(hIcon));
 	return true;
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <windef.h>
 #include <string>
 #include <SFML/Graphics.hpp>
 
