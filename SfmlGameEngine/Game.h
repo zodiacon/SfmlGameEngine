@@ -23,6 +23,10 @@ public:
 	}
 	std::shared_ptr<Scene> PopScene();
 
+	std::function<void(float dt)> Update;
+	std::function<void(sf::RenderWindow&, float)> Draw;
+	std::function<bool(sf::Event const&)> HandleEvent;
+
 	void Pause();
 	void Resume();
 	bool IsPaused() const;

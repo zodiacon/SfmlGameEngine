@@ -28,10 +28,17 @@ void Game::Run() {
 				auto dt = time.asSeconds();
 				scene->OnUpdate(dt);
 				scene->OnDraw(m_Window, dt);
-				m_Window.display();
 			}
+			else {
+				m_Window.clear(m_BackColor);
+				auto dt = time.asSeconds();
+				if(Update)
+					Update(dt);
+				if(Draw)
+					Draw(m_Window, dt);
+			}
+			m_Window.display();
 		}
-		m_Window.clear(m_BackColor);
 		if(!m_Paused)
 			m_Time += time;
 	}
