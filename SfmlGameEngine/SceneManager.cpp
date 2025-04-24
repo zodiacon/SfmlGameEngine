@@ -5,6 +5,9 @@
 #include "Scene.h"
 
 void SceneManager::PushScene(std::shared_ptr<Scene> scene, bool replace) {
+	//if (!m_Scenes.empty())
+	//	m_Scenes.top()->OnTerm();
+
 	if (m_Scenes.empty())
 		m_Scenes.push(std::move(scene));
 	else {
@@ -12,6 +15,9 @@ void SceneManager::PushScene(std::shared_ptr<Scene> scene, bool replace) {
 			m_Scenes.pop();
 		m_Scenes.push(std::move(scene));
 	}
+
+	if (!m_Scenes.empty())
+		m_Scenes.top()->OnInit();
 }
 
 std::shared_ptr<Scene> SceneManager::GetCurrentScene() {
@@ -21,6 +27,8 @@ std::shared_ptr<Scene> SceneManager::GetCurrentScene() {
 std::shared_ptr<Scene> SceneManager::Pop() {
 	auto top = m_Scenes.top();
 	m_Scenes.pop();
+	if (!m_Scenes.empty())
+		m_Scenes.top()->OnInit();
 	return top;
 }
 

@@ -20,7 +20,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	MinesweeperGame ms;
 	Game game;
 	game.Init(800, 600, "SFML Minesweeper");
-	SfmlHelpers::SetWindowIcon(game.Window(), IDI_MINESWEEPER);
+	Sfml::SetWindowIcon(game.Window(), IDI_MINESWEEPER);
 
 	auto main = std::make_shared<Scene>(game);
 	game.LoadTexture("mine.png");
@@ -29,15 +29,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game.LoadFont("space.ttf");
 
 	bool gameOver = false, gameWon = false;
-	unsigned cellSize = 40;
-	auto statHeight = 40, xoffset = 20;
+	int cellSize = 40;
+	auto yoffset = 40, xoffset = 20;
 	auto& flag = game.Texture("flag");
 	sf::Sprite flagSprite(flag);
-	SfmlHelpers::SetSpriteSizeCentered(flagSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .8f);
+	Sfml::SetSpriteSizeCentered(flagSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .8f);
 
 	auto& mine = game.Texture("mine");
 	sf::Sprite mineSprite(mine);
-	SfmlHelpers::SetSpriteSizeCentered(mineSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .9f);
+	Sfml::SetSpriteSizeCentered(mineSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .9f);
 
 	auto font = game.Font("arial");
 	sf::Text mineCountText(font, "0", int(cellSize * .8f));
@@ -45,6 +45,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	auto space = game.Font("space");
 	auto emptyCellColor = Colors::LightBlue;
+
+	auto menu = std::make_shared<Scene>(game);
+	main->Init = [&] {
+		game.Restart();
+		};
+
+	Gui gui(game.Window());
 
 	main->Update = [&](auto dt) {
 		if (ms.IsGridFull()) {
@@ -55,14 +62,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		}
 		};
 
-	main->HandleEvent = [&](sf::Event const& evt) {
-		if (gameOver)
-			return false;
-
+	main->HandleEvent = [&](auto const& evt) {
 		if (evt.is<sf::Event::MouseButtonReleased>()) {
 			auto params = evt.getIf<sf::Event::MouseButtonReleased>();
+			if (gameOver && params->button == sf::Mouse::Button::Left) {
+				game.PushScene(menu);
+				gui.setWindow(game.Window());
+				return true;
+			}
 			int x = params->position.x, y = params->position.y;
-			auto cx = (x - xoffset) / cellSize, cy = (y - statHeight) / cellSize;
+			if (x < xoffset || y < yoffset)
+				return false;
+
+			auto cx = (x - xoffset) / cellSize, cy = (y - yoffset) / cellSize;
+			if (cx >= ms.GetWidth() || cy >= ms.GetHeight())
+				return false;
+
 			auto& cell = ms.GetCell(x, y);
 			if (params->button == sf::Mouse::Button::Right) {
 				ms.ToggleFlag(cx, cy);
@@ -90,13 +105,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		sf::Text stats(space, std::format("Time: {} Flags: {} Left: {}",
 			(int)game.GetTime().asSeconds(), ms.GetTotalFlags(), ms.GetTotalMines() - ms.GetTotalFlags()), 25);
-		stats.setPosition(sf::Vector2f(SfmlHelpers::CenterX(stats, win), 4));
+		stats.setPosition(sf::Vector2f(Sfml::CenterX(stats, win), 4));
 		stats.setFillColor(Colors::Yellow);
 		win.draw(stats);
 
 		for (int y = 0; y < ms.GetHeight(); y++) {
 			for (int x = 0; x < ms.GetWidth(); x++) {
-				r.setPosition(Vector2f(x * cellSize + 1.f + xoffset, y * cellSize + 1.f + statHeight));
+				r.setPosition(Vector2f(x * cellSize + 1.f + xoffset, y * cellSize + 1.f + yoffset));
 				auto state = ms.GetCell(x, y).State;
 				switch (state) {
 					case CellState::Flag:
@@ -143,12 +158,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			sf::Text gameOver(space, "  GAME OVER  \nYou have won!", 40);
 			gameOver.setStyle(sf::Text::Bold);
 			gameOver.setFillColor(Colors::LightGreen);
-			gameOver.setPosition(SfmlHelpers::Center(gameOver, win));
+			gameOver.setPosition(Sfml::Center(gameOver, win));
 			win.draw(gameOver, sf::RenderStates::Default);
 		}
 		};
-
-	auto menu = std::make_shared<Scene>(game);
 
 	char path[MAX_PATH];
 	::GetModuleFileNameA(nullptr, path, _countof(path));
@@ -156,8 +169,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	strcat_s(path, "\\Themes\\black.txt");
 	Theme::setDefault(path);
 
-	Gui gui(game.Window());
-	menu->SetWindowSize(600, 600);
+	menu->SetWindowSize({ 600, 600 });
 	LevelData levels[] = {
 		{ "Beginner", 10, 10, 15 },
 		{ "Intermediate", 15, 15, 20 },
@@ -168,7 +180,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	int i = 0;
 	static int selectedLevel = 1;
-	for (auto& level : levels) {
+	for (auto const& level : levels) {
 		auto radio = RadioButton::create();
 		radio->setText(level.text);
 		radio->setTextSize(25);
@@ -192,7 +204,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		gameOver = gameWon = false;
 		auto& level = levels[selectedLevel - 1];
 		int width = level.width, height = level.height;
-		auto winSize = sf::Vector2u(width * cellSize + xoffset * 2, height * cellSize + statHeight + xoffset);
+		auto winSize = sf::Vector2u(width * cellSize + xoffset * 2, height * cellSize + yoffset + xoffset);
 		main->SetWindowSize(winSize);
 		ms.Init(width, height);
 		ms.PlaceMinesPercent(level.percent);
@@ -206,7 +218,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	sf::Text title(font, "MINESWEEPER - SFML edition", 30);
 	title.setFillColor(Colors::Yellow);
 	menu->Draw = [&](auto& win, auto dt) {
-		title.setPosition(sf::Vector2f(SfmlHelpers::CenterX(title, game.Window()), 20));
+		title.setPosition(sf::Vector2f(Sfml::CenterX(title, game.Window()), 20));
 		win.draw(title);
 		gui.draw();
 		};

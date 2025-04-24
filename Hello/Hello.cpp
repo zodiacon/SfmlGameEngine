@@ -17,11 +17,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		auto& font = game.Font("Arial");
 		sf::Text text(font, "Hello, SFML Engine!", 40);
-		text.setPosition(SfmlHelpers::Center(text, win));
+		text.setPosition(Sfml::Center(text, win));
 
 		sf::RectangleShape r;
 		r.setFillColor(Colors::Aqua);
-		//r.setRotation(sf::Angle(45 * std::numbets::PI);
+		r.setRotation(sf::degrees(45));
 		r.setPosition(sf::Vector2f(100, 100));
 		r.setSize(sf::Vector2f(50, 50));
 

@@ -12,27 +12,25 @@ bool Game::Init(uint32_t width, uint32_t height, const std::string& title, uint3
 
 void Game::Run() {
 	while (m_Window.isOpen()) {
-		auto scene = ActiveScene();
 		auto time = m_Clock.restart();
-		while (m_Window.isOpen()) {
-			while (auto const event = m_Window.pollEvent()) {
-				if (scene == nullptr || scene->HandleEvent == nullptr || !scene->HandleEvent(*event)) {
-					if (event->is<sf::Event::Closed>()) {
-						m_Window.close();
-					}
+		auto scene = ActiveScene();
+		while (auto const event = m_Window.pollEvent()) {
+			if (scene == nullptr || scene->HandleEvent == nullptr || !scene->HandleEvent(*event)) {
+				if (event->is<sf::Event::Closed>()) {
+					m_Window.close();
 				}
 			}
-			if (scene) {
-				auto& color = scene->GetBackColor();
-				m_Window.clear(color == sf::Color::Transparent ? m_BackColor : color);
-				auto dt = time.asSeconds();
-				scene->OnUpdate(dt);
-				scene->OnDraw(m_Window, dt);
-				m_Window.display();
-			}
+		}
+		if (scene) {
+			auto& color = scene->GetBackColor();
+			m_Window.clear(color == sf::Color::Transparent ? m_BackColor : color);
+			auto dt = time.asSeconds();
+			scene->OnUpdate(dt);
+			scene->OnDraw(m_Window, dt);
+			m_Window.display();
 		}
 		m_Window.clear(m_BackColor);
-		if(!m_Paused)
+		if (!m_Paused)
 			m_Time += time;
 	}
 }
@@ -54,8 +52,8 @@ sf::Font const& Game::Font(std::string const& name) const {
 
 void Game::PushScene(std::shared_ptr<Scene> scene, bool replace) {
 	if (scene->GetWindowSize().x)
-		SfmlHelpers::SetWindowFullSize(m_Window, scene->GetWindowSize());
-	m_SceneManager.PushScene(std::move(scene), replace);
+		Sfml::SetWindowFullSize(m_Window, scene->GetWindowSize());
+	m_SceneManager.PushScene(scene, replace);
 }
 
 std::shared_ptr<Scene> Game::ActiveScene() {
@@ -86,6 +84,11 @@ bool Game::IsPaused() const {
 	return m_Paused;
 }
 
+void Game::Restart() {
+	m_Time = sf::Time::Zero;
+	m_Paused = false;
+}
+
 sf::Time const& Game::GetTime() const {
 	return m_Time;
 }
@@ -97,7 +100,7 @@ sf::Time Game::GetElapsedTime() const {
 std::shared_ptr<Scene> Game::PopScene() {
 	auto scene = m_SceneManager.Pop();
 	auto current = ActiveScene();
-	if(current && current->GetWindowSize().x)
-			SfmlHelpers::SetWindowFullSize(m_Window, current->GetWindowSize());
+	if (current && current->GetWindowSize().x)
+		Sfml::SetWindowFullSize(m_Window, current->GetWindowSize());
 	return scene;
 }

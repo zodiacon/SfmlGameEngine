@@ -20,10 +20,6 @@ void Scene::SetWindowSize(sf::Vector2u size) {
 	m_WindowSize = size;
 }
 
-void Scene::SetWindowSize(unsigned sx, unsigned sy) {
-	SetWindowSize(sf::Vector2u(sx, sy));
-}
-
 sf::Vector2u const& Scene::GetWindowSize() const {
 	return m_WindowSize;
 }
@@ -46,4 +42,9 @@ void Scene::OnDraw(sf::RenderWindow& win, float dt) {
 		if (comp->IsEnabled() && comp->IsVisible())
 			comp->Draw(win, dt);
 	}
+}
+
+void Scene::OnInit() {
+	if (Init)
+		Init();
 }

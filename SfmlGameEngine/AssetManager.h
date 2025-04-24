@@ -4,19 +4,16 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "MoveOnly.h"
 
 namespace sf {
 	class Texture;
 	class Font;
 }
 
-class AssetManager {
+class AssetManager : public MoveOnly {
 public:
-	AssetManager();
-	AssetManager(AssetManager const&) = delete;
-	AssetManager& operator=(AssetManager const&) = delete;
-	AssetManager(AssetManager&&) = default;
-	AssetManager& operator=(AssetManager&&) = default;
+	explicit AssetManager(AssetManager* parent = nullptr);
 
 	bool LoadTexture(std::string const& fileName, std::string name = "");
 	sf::Texture const& Texture(std::string const& name) const;

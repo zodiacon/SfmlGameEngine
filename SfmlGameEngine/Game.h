@@ -26,6 +26,7 @@ public:
 	void Pause();
 	void Resume();
 	bool IsPaused() const;
+	void Restart();
 
 	sf::Time const& GetTime() const;
 	sf::Time GetElapsedTime() const;

@@ -5,7 +5,7 @@
 #include <SFML/Audio.hpp>
 #include <cassert>
 
-AssetManager::AssetManager() {
+AssetManager::AssetManager(AssetManager* parent) {
 	char path[MAX_PATH];
 	::GetModuleFileNameA(nullptr, path, _countof(path));
 	*strrchr(path, L'\\') = 0;
@@ -19,7 +19,7 @@ bool AssetManager::LoadTexture(std::string const& fileName, std::string name) {
 		return false;
 
 	if (name.empty()) {
-		name = SfmlHelpers::GetNameFromFileName(fileName);
+		name = Sfml::GetNameFromFileName(fileName);
 	}
 	return m_Textures.try_emplace(std::move(name), texture).second;
 }
@@ -40,7 +40,7 @@ bool AssetManager::LoadFont(std::string const& fileName, std::string name) {
 	}
 
 	if (name.empty()) {
-		name = SfmlHelpers::GetNameFromFileName(fileName);
+		name = Sfml::GetNameFromFileName(fileName);
 	}
 
 	return m_Fonts.try_emplace(std::move(name), std::move(font)).second;
@@ -56,7 +56,7 @@ bool AssetManager::LoadSound(std::string const& fileName, std::string name) {
 		return false;
 
 	if (name.empty()) {
-		name = SfmlHelpers::GetNameFromFileName(fileName);
+		name = Sfml::GetNameFromFileName(fileName);
 	}
 	return m_Audio.try_emplace(std::move(name), std::move(sound)).second;
 }
