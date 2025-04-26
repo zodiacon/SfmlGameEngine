@@ -6,7 +6,6 @@
 class Game;
 
 class Scene {
-	friend class SceneManager;
 public:
 	explicit Scene(Game& game);
 
@@ -16,10 +15,10 @@ public:
 	std::function<void()> Init;
 
 	Game& GetGame() const;
-	sf::Color const& GetBackColor() const;
 	void SetBackColor(sf::Color color);
+	[[nodiscard]] sf::Color const& GetBackColor() const;
 	void SetWindowSize(sf::Vector2u size);
-	sf::Vector2u const& GetWindowSize() const;
+	[[nodiscard]] sf::Vector2u const& WindowSize() const;
 
 protected:
 	virtual void OnUpdate(float dt);
@@ -32,4 +31,5 @@ private:
 	std::vector<std::unique_ptr<GameComponent>> m_Components;
 	sf::Color m_BackColor{ sf::Color::Transparent };
 	friend class Game;
+	friend class SceneManager;
 };

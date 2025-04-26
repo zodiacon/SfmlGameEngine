@@ -20,7 +20,7 @@ void Scene::SetWindowSize(sf::Vector2u size) {
 	m_WindowSize = size;
 }
 
-sf::Vector2u const& Scene::GetWindowSize() const {
+sf::Vector2u const& Scene::WindowSize() const {
 	return m_WindowSize;
 }
 

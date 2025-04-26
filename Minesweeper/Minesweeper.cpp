@@ -31,19 +31,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	bool gameOver = false, gameWon = false;
 	int cellSize = 40;
 	auto yoffset = 40, xoffset = 20;
-	auto& flag = game.Texture("flag");
-	sf::Sprite flagSprite(flag);
+	auto flag = game.GetTexture("flag");
+	sf::Sprite flagSprite(*flag);
 	Sfml::SetSpriteSizeCentered(flagSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .8f);
 
-	auto& mine = game.Texture("mine");
-	sf::Sprite mineSprite(mine);
+	auto mine = game.GetTexture("mine");
+	sf::Sprite mineSprite(*mine);
 	Sfml::SetSpriteSizeCentered(mineSprite, sf::Vector2f((float)cellSize, (float)cellSize) * .9f);
 
-	auto font = game.Font("arial");
-	sf::Text mineCountText(font, "0", int(cellSize * .8f));
+	auto font = game.GetFont("arial");
+	sf::Text mineCountText(*font, "0", int(cellSize * .8f));
 	mineCountText.setOutlineColor(sf::Color::White);
 
-	auto space = game.Font("space");
+	auto space = game.GetFont("space");
 	auto emptyCellColor = Colors::LightBlue;
 
 	auto menu = std::make_shared<Scene>(game);
@@ -103,7 +103,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		r.setOutlineColor(sf::Color::Blue);
 		r.setOutlineThickness(1.0f);
 
-		sf::Text stats(space, std::format("Time: {} Flags: {} Left: {}",
+		sf::Text stats(*space, std::format("Time: {} Flags: {} Left: {}",
 			(int)game.GetTime().asSeconds(), ms.GetTotalFlags(), ms.GetTotalMines() - ms.GetTotalFlags()), 25);
 		stats.setPosition(sf::Vector2f(Sfml::CenterX(stats, win), 4));
 		stats.setFillColor(Colors::Yellow);
@@ -155,7 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 		if (gameWon) {
-			sf::Text gameOver(space, "  GAME OVER  \nYou have won!", 40);
+			sf::Text gameOver(*space, "  GAME OVER  \nYou have won!", 40);
 			gameOver.setStyle(sf::Text::Bold);
 			gameOver.setFillColor(Colors::LightGreen);
 			gameOver.setPosition(Sfml::Center(gameOver, win));
@@ -215,7 +215,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return gui.handleEvent(evt);
 		};
 
-	sf::Text title(font, "MINESWEEPER - SFML edition", 30);
+	sf::Text title(*font, "MINESWEEPER - SFML edition", 30);
 	title.setFillColor(Colors::Yellow);
 	menu->Draw = [&](auto& win, auto dt) {
 		title.setPosition(sf::Vector2f(Sfml::CenterX(title, game.Window()), 20));

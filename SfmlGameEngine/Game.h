@@ -3,6 +3,7 @@
 #include "SceneManager.h"
 #include "AssetManager.h"
 #include <SFML/Graphics.hpp>
+#include <functional>
 #include "MoveOnly.h"
 
 class Game : public MoveOnly {
@@ -12,9 +13,9 @@ public:
 	virtual void Run();
 
 	bool LoadTexture(std::string const& fileName, std::string name = "");
-	sf::Texture const& Texture(std::string const& name) const;
+	sf::Texture const* GetTexture(std::string const& name) const;
 	bool LoadFont(std::string const& fileName, std::string name = "");
-	sf::Font const& Font(std::string const& name) const;
+	sf::Font const* GetFont(std::string const& name) const;
 
 	void PushScene(std::shared_ptr<Scene> scene, bool replace = false);
 	template<typename T>

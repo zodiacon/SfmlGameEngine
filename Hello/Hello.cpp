@@ -15,8 +15,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	empty->Draw = [&](auto& win, auto dt) {
 		win.clear();
 
-		auto& font = game.Font("Arial");
-		sf::Text text(font, "Hello, SFML Engine!", 40);
+		auto font = game.GetFont("Arial");
+		sf::Text text(*font, "Hello, SFML Engine!", 40);
 		text.setPosition(Sfml::Center(text, win));
 
 		sf::RectangleShape r;

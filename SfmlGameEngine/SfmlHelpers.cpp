@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "SfmlHelpers.h"
+#include <SFML/Graphics.hpp>
 
 namespace Sfml {
 	std::string Sfml::GetNameFromFileName(std::string const& fileName) {
@@ -21,13 +22,13 @@ namespace Sfml {
 	}
 
 	sf::Vector2f Sfml::Center(sf::Text& text, sf::RenderTarget& target) {
-		return sf::Vector2f(CenterX(text, target), CenterY(text, target));
+		return { CenterX(text, target), CenterY(text, target) };
 	}
 
 	void Sfml::SetSpriteSizeCentered(sf::Sprite& sprite, sf::Vector2f const& size) {
 		auto tsize = sprite.getTexture().getSize();
-		sprite.setScale(sf::Vector2f(size.x / tsize.x, size.y / tsize.y));
-		sprite.setOrigin(sf::Vector2f(tsize.x / 2.f, tsize.y / 2.f));
+		sprite.setScale({ size.x / tsize.x, size.y / tsize.y });
+		sprite.setOrigin({ tsize.x / 2.f, tsize.y / 2.f });
 	}
 
 	bool Sfml::SetWindowIcon(sf::Window& win, HICON hIcon, HINSTANCE hInstance) {
@@ -51,4 +52,9 @@ namespace Sfml {
 		sf::View view(sf::Vector2f(size) / 2.f, sf::Vector2f(size));
 		win.setView(view);
 	}
+
+	bool StringNoCaseEqual::operator()(std::string const& lhs, std::string const& rhs) const {
+		return _stricmp(lhs.c_str(), rhs.c_str()) == 0;
+	}
 }
+

@@ -39,20 +39,21 @@ bool Game::LoadTexture(std::string const& fileName, std::string name) {
 	return m_AssetsManager.LoadTexture(fileName, std::move(name));
 }
 
-sf::Texture const& Game::Texture(std::string const& name) const {
-	return m_AssetsManager.Texture(name);
+sf::Texture const* Game::GetTexture(std::string const& name) const {
+	return m_AssetsManager.GetTexture(name);
 }
+
 bool Game::LoadFont(std::string const& fileName, std::string name) {
 	return m_AssetsManager.LoadFont(fileName, std::move(name));
 }
 
-sf::Font const& Game::Font(std::string const& name) const {
-	return m_AssetsManager.Font(name);
+sf::Font const* Game::GetFont(std::string const& name) const {
+	return m_AssetsManager.GetFont(name);
 }
 
 void Game::PushScene(std::shared_ptr<Scene> scene, bool replace) {
-	if (scene->GetWindowSize().x)
-		Sfml::SetWindowFullSize(m_Window, scene->GetWindowSize());
+	if (scene->WindowSize().x)
+		Sfml::SetWindowFullSize(m_Window, scene->WindowSize());
 	m_SceneManager.PushScene(scene, replace);
 }
 
@@ -100,7 +101,7 @@ sf::Time Game::GetElapsedTime() const {
 std::shared_ptr<Scene> Game::PopScene() {
 	auto scene = m_SceneManager.Pop();
 	auto current = ActiveScene();
-	if (current && current->GetWindowSize().x)
-		Sfml::SetWindowFullSize(m_Window, current->GetWindowSize());
+	if (current && current->WindowSize().x)
+		Sfml::SetWindowFullSize(m_Window, current->WindowSize());
 	return scene;
 }
