@@ -31,18 +31,18 @@ namespace Sfml {
 		sprite.setOrigin({ tsize.x / 2.f, tsize.y / 2.f });
 	}
 
-	bool Sfml::SetWindowIcon(sf::Window& win, HICON hIcon, HINSTANCE hInstance) {
+	bool Sfml::SetWindowIcon(sf::Window const& win, HICON hIcon) {
 		::SendMessage(win.getNativeHandle(), WM_SETICON, 1, reinterpret_cast<LPARAM>(hIcon));
 		::SendMessage(win.getNativeHandle(), WM_SETICON, 0, reinterpret_cast<LPARAM>(hIcon));
 		return true;
 	}
 
-	bool Sfml::SetWindowIcon(sf::Window& win, UINT id, HINSTANCE hInstance) {
+	bool Sfml::SetWindowIcon(sf::Window const& win, UINT id, HINSTANCE hInstance) {
 		auto hIcon = ::LoadIcon(hInstance ? hInstance : ::GetModuleHandle(nullptr), MAKEINTRESOURCE(id));
 		return hIcon ? SetWindowIcon(win, hIcon) : false;
 	}
 
-	bool Sfml::SetWindowIcon(sf::Window& win, PCTSTR id, HINSTANCE hInstance) {
+	bool Sfml::SetWindowIcon(sf::Window const& win, PCTSTR id, HINSTANCE hInstance) {
 		auto hIcon = ::LoadIcon(hInstance ? hInstance : ::GetModuleHandle(nullptr), id);
 		return hIcon ? SetWindowIcon(win, hIcon) : false;
 	}
@@ -54,7 +54,7 @@ namespace Sfml {
 	}
 
 	bool StringNoCaseEqual::operator()(std::string const& lhs, std::string const& rhs) const {
-		return _stricmp(lhs.c_str(), rhs.c_str()) == 0;
+		return _stricmp(lhs.c_str(), rhs.c_str()) < 0;
 	}
 }
 
