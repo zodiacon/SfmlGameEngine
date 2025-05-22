@@ -19,6 +19,7 @@ protected:
 	GameComponent() = default;
 
 private:
-	bool m_Visible{ true }, m_Enabled{ true };
+	bool m_Visible{ true };
+	bool m_Enabled{ true };
 };
 
