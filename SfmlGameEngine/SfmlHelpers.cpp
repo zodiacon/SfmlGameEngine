@@ -24,6 +24,10 @@ namespace Sfml {
 		return { CenterX(text, target), CenterY(text, target) };
 	}
 
+	sf::Vector2f Center(sf::Text const& text, sf::FloatRect const& rc) {
+		return { rc.getCenter().x - text.getLocalBounds().size.x / 2, rc.getCenter().y - text.getLocalBounds().size.y / 2 };
+	}
+
 	void SetSpriteSizeCentered(sf::Sprite& sprite, sf::Vector2f const& size) {
 		auto tsize = sprite.getTexture().getSize();
 		sprite.setScale({ size.x / tsize.x, size.y / tsize.y });

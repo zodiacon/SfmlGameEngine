@@ -21,15 +21,19 @@ void Game::Run() {
 				}
 			}
 		}
+		auto dt = time.asSeconds();
 		if (scene) {
 			auto& color = scene->GetBackColor();
 			m_Window.clear(color == sf::Color::Transparent ? m_BackColor : color);
-			auto dt = time.asSeconds();
 			scene->OnUpdate(dt);
 			scene->OnDraw(m_Window, dt);
-			m_Window.display();
 		}
 		m_Window.clear(m_BackColor);
+		if (Update)
+			Update(dt);
+		if (Draw)
+			Draw(m_Window, dt);
+		m_Window.display();
 		if (!m_Paused)
 			m_Time += time;
 	}

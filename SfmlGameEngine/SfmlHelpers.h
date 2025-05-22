@@ -9,6 +9,7 @@ namespace Sfml {
 	[[nodiscard]] float CenterX(sf::Text const& text, sf::RenderTarget& target);
 	[[nodiscard]] float CenterY(sf::Text const& text, sf::RenderTarget& target);
 	[[nodiscard]] sf::Vector2f Center(sf::Text const& text, sf::RenderTarget& target);
+	[[nodiscard]] sf::Vector2f Center(sf::Text const& text, sf::FloatRect const& rc);
 	void SetSpriteSizeCentered(sf::Sprite& sprite, sf::Vector2f const& size);
 	bool SetWindowIcon(sf::Window const& win, HICON hIcon);
 	bool SetWindowIcon(sf::Window const& win, UINT id, HINSTANCE hInstance = nullptr);
