@@ -28,7 +28,9 @@ void Game::Run() {
 			scene->OnUpdate(dt);
 			scene->OnDraw(m_Window, dt);
 		}
-		m_Window.clear(m_BackColor);
+		else {
+			m_Window.clear(m_BackColor);
+		}
 		if (Update)
 			Update(dt);
 		if (Draw)

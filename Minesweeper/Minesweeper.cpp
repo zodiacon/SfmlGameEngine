@@ -220,6 +220,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	menu->Draw = [&](auto& win, auto dt) {
 		title.setPosition(sf::Vector2f(Sfml::CenterX(title, game.Window()), 20));
 		win.draw(title);
+
 		gui.draw();
 		};
 
